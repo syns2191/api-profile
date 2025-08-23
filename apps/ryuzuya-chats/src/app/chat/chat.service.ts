@@ -5,11 +5,13 @@ import { isSeriousInquiry } from './utils/intents';
 import { MemoryStore } from './chat.store';
 import { IntegrationService } from '../integrations/integration.service';
 import { ITelegramPayload } from './interfaces/chat.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ChatService {
   constructor(
-    private readonly integrationService: IntegrationService
+    private readonly integrationService: IntegrationService,
+    private readonly config: ConfigService
   ) {}
   private transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -23,7 +25,7 @@ export class ChatService {
   async forwardToEmail(payload: { name: string; email?: string; message: string; conversationId: string; }) {
     const { name, email, message, conversationId } = payload;
     await this.transporter.sendMail({
-      from: `"Portfolio Chat" <${'sutralian@gmail.com'}>`,
+      from: `"Profile Chat" <${'sutralian@gmail.com'}>`,
       to: process.env.EMAIL_TO,
       subject: `🔔 New Inquiry [#${conversationId}] from ${name}`,
       text: `[#${conversationId}] From: ${name}${email ? ` <${email}>` : ''}\n\n${message}\n`,
@@ -31,21 +33,22 @@ export class ChatService {
   }
 
   async forwardToTelegram(payload: ITelegramPayload) {
+    const telegramAPI = this.config.get<string>('TELEGRAM_API');
     const { name, email, message, conversationId } = payload;
     const telegramCred = await this.integrationService.findByUserChannel(
       payload.profileId,
       'telegram'
     );
-    console.log(telegramCred);
+
     const token = telegramCred.creds?.token;
     const chatId = telegramCred.creds?.chatId;
     const text =
-      `📩 New Inquiry [#${conversationId}]\n` +
+      `📩 New Message [#${conversationId}]\n` +
       `From: ${name}${email ? ` <${email}>` : ''}\n\n` +
       `${message}\n\n` +
-      `↩️ Reply in this chat and KEEP [#${conversationId}] in your message.`;
+      `↩️ Reply with [#${conversationId}].`;
 
-    await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+    await axios.post(`${telegramAPI}/bot${token}/sendMessage`, {
       chat_id: chatId,
       text,
     });

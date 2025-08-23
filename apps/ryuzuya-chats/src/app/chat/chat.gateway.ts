@@ -67,7 +67,7 @@ export class ChatGateway {
       // await this.chat.forwardToEmail({ name: dto.name, email: dto.guestId, message: dto.message, conversationId });
 
       this.server.to(conversationId).emit('system:info',
-        { text: 'Thanks! Your inquiry reached me via Telegram & email. I’ll reply shortly.' });
+        { text: 'Thanks! Your inquiry reached me via Telegram. I’ll reply shortly.' });
     } else {
       // Lightweight auto-reply example
       this.server.to(conversationId).emit('bot:reply',
