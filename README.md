@@ -1,82 +1,108 @@
-# RyuzuyaChats
+# Ryuzuya Chats Backend
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This repository contains the backend services for Ryuzuya Chats, built with NestJS and Nx. It provides various APIs for user authentication, chat functionalities, project management, and integrations.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## Table of Contents
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [Running Tests](#running-tests)
+- [Project Structure](#project-structure)
 
-## Finish your CI setup
+## Features
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/vgeQ5uY7Ie)
+- **Authentication**: User registration, login, and session management using JWT.
+- **Chat**: Real-time chat functionalities using WebSockets (NestJS Gateway) and Redis.
+- **User Management**: APIs for managing user profiles.
+- **Project Management**: APIs for creating and managing projects.
+- **Integrations**: Modules for external service integrations.
+- **Skill Categories & Tech Stack**: Management of skill categories and technology stacks.
+- **Telegram Integration**: Specific modules for Telegram-related functionalities.
 
+## Prerequisites
 
-## Run tasks
+Before you begin, ensure you have the following installed:
 
-To run the dev server for your app, use:
+- Node.js (LTS version recommended)
+- npm or Yarn
+- Docker (for running MongoDB and Redis)
 
-```sh
+## Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/your-username/ryuzuya-chats.git
+    cd ryuzuya-chats
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    yarn install
+    # or
+    npm install
+    ```
+
+3.  **Set up environment variables:**
+    Create a `.env` file in the root directory based on `env.example` (you might need to create `env.example` first, or refer to the `config` module for required variables).
+
+    Example `.env` content:
+
+    ```
+    MONGO_URI=mongodb://localhost:27017/ryuzuya_chats
+    REDIS_HOST=localhost
+    REDIS_PORT=6379
+    JWT_SECRET=your_jwt_secret
+    JWT_EXPIRATION_TIME=3600s
+    JWT_REFRESH_SECRET=your_jwt_refresh_secret
+    JWT_REFRESH_EXPIRATION_TIME=7d
+    ```
+
+4.  **Start Docker services (MongoDB and Redis):**
+
+    ```bash
+    docker-compose up -d
+    ```
+    *(Note: You might need to create a `docker-compose.yml` file if it doesn't exist, or manually start MongoDB and Redis.)*
+
+## Running the Application
+
+To run the development server:
+
+```bash
 npx nx serve ryuzuya-chats
 ```
 
-To create a production bundle:
+The application will typically run on `http://localhost:3000`.
 
-```sh
-npx nx build ryuzuya-chats
+## Running Tests
+
+To run all unit and integration tests:
+
+```bash
+npx nx test ryuzuya-chats
 ```
 
-To see all available targets to run for a project, run:
+To run end-to-end tests:
 
-```sh
-npx nx show project ryuzuya-chats
+```bash
+npx nx e2e ryuzuya-chats-e2e
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Project Structure
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+The core application logic resides in `apps/ryuzuya-chats/src/app/`. Key modules include:
 
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/nest:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/node:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+-   `auth/`: Authentication logic, guards, strategies.
+-   `chat/`: Real-time chat gateway and services.
+-   `config/`: Application configuration files.
+-   `database/`: Database connection setup.
+-   `integrations/`: External service integrations.
+-   `projects/`: Project management.
+-   `skill-categories/`: Skill category management.
+-   `tech-stack/`: Technology stack management.
+-   `telegram/`: Telegram specific functionalities.
+-   `users/`: User management.
