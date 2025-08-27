@@ -9,6 +9,7 @@ import { AppModule } from './app/app.module';
 import { RedisIoAdapter } from './app/adapters/redis.adapter';
 import cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
+import { RedisService } from './app/adapters/redis.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,11 @@ async function bootstrap() {
   app.useWebSocketAdapter(redisIoAdapter);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
+
+  // attach redis
+  const redisService = app.get(RedisService);
+  console.log(redisService);
+  redisService.attach(redisIoAdapter.getRedis());
   const port = process.env.PORT || 3034;
   await app.listen(port);
   Logger.log(

@@ -28,7 +28,6 @@ export class UserController {
 
   @Patch(':userId')
   async updateUser(@Body() createUserDto: CreateUserDto, @Param() param: {userId: string}) {
-    console.log('createUserDto', createUserDto);
     return this.userService.updateUser(param.userId, createUserDto);
   }
 

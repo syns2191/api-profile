@@ -1,4 +1,5 @@
-
+import { Injectable } from "@nestjs/common";
+import { RedisService } from "../adapters/redis.service";
 // For production, back this with Redis or DB.
 export type Conversation = {
   id: string;
@@ -7,13 +8,21 @@ export type Conversation = {
   guestId?: string;
 };
 
+@Injectable()
 export class MemoryStore {
-  private static conversations = new Map<string, Conversation>();
+  constructor(
+    private readonly redis: RedisService
+  ) {}
 
-  static upsert(c: Conversation) {
-    MemoryStore.conversations.set(c.id, { ...MemoryStore.conversations.get(c.id), ...c });
+  async upsert(c: Conversation) {
+    const cachedValue = await this.redis?.clientOrThrow?.get(`${c.id}`);
+    const cachedValueParsed = cachedValue ? JSON.parse(cachedValue.toString()) : {};
+    this.redis?.clientOrThrow?.set(`${c.id}`, JSON.stringify({ ...c, ...cachedValueParsed }), { EX: 30_000 } )
   }
-  static get(id: string) {
-    return MemoryStore.conversations.get(id);
+
+  async get(id: string) {
+    const cachedValue = await this.redis.clientOrThrow.get(`${id}`);
+    const cachedValueParsed = cachedValue ? JSON.parse(cachedValue.toString()) : {};
+    return cachedValueParsed;
   }
 }

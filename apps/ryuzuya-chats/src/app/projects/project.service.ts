@@ -15,17 +15,31 @@ export class ProjectService {
     return createdProject;
   }
 
+  async updateById(id: string, createProjectDto: CreateProjectDto): Promise<IProject> {
+    const updated = await this.projectModel.findOneAndUpdate(
+      {_id: id},
+      {$set: {
+        projectTitle: createProjectDto.projectTitle,
+        projectShortDescription: createProjectDto.projectShortDescription,
+        projectTeachStack: createProjectDto.projectTeachStack
+      }}
+    )
+    return updated;
+  }
+
   async findOne(project: Partial<IProject>): Promise<IProject> {
     const projectData = await this.projectModel.findOne({
       _id: project._id
-    });
+    }).populate('projectTeachStack');
     return projectData;
   }
 
   async findAll(project: Partial<IProjectFilter>): Promise<IProject[]> {
     const projectData = await this.projectModel.find({
       projectTitle: {$regex: project.projectTitle, $options: 'i'}
-    }).limit(project.limit).skip(project.page * project.limit);
+    })
+      .limit(project.limit)
+      .skip(project.page * project.limit);
     return projectData;
   }
 

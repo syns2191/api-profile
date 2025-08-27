@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 export const ProjectSchema = new mongoose.Schema({
   projectTitle: String,
-  prejectShortDescription: String,
+  projectShortDescription: String,
   projectImage: String,
   projectDemoLink: String,
   projectCodeLink: String,
@@ -17,4 +17,6 @@ export const ProjectSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   }
-});
+}, {
+    timestamps: true
+  });

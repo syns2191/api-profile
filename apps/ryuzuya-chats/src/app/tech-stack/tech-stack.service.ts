@@ -57,11 +57,38 @@ export class TechStackService {
     return stackData;
   }
 
+  async findOneStackCategory(id: string): Promise<ITechStackCategory> {
+    const stackDataCategory = await this.techStackCategoryModel.findOne({
+      _id: id
+    })
+      .populate('stack')
+      .populate('category');
+    return stackDataCategory;
+  }
+
+  async updateOneStackCategory(id: string, createTechStack: CreateTechStackDto): Promise<ITechStack> {
+    const stackCategory = await this.techStackCategoryModel.findOneAndUpdate(
+      {_id: id},
+      {$set: {
+        category: createTechStack.category
+      }}
+    )
+    const stack = await this.techStackModel.findOneAndUpdate(
+      { _id: stackCategory.stack },
+      {$set: {
+        stackName: createTechStack.stackName,
+        stackIcon: createTechStack.stackIcon
+      }}
+    )
+    return stack;
+  }
+
   async findStackCategory(techStackFilter: Partial<ITechStackFilter>): Promise<ITechStackCategory[]> {
     const stackCategory = await this.techStackCategoryModel.find()
       .limit(techStackFilter.limit)
       .skip(techStackFilter.page * techStackFilter.limit)
       .populate('category')
+     .populate('stack')
     return stackCategory
   }
 
