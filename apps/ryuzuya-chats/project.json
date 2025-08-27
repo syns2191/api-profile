@@ -5,15 +5,59 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build:worker": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "webpack-cli build",
+        "args": [
+          "--config",
+          "apps/ryuzuya-chats/webpack.worker.config.js",
+          "--node-env=production"
+        ]
+      },
+      "configurations": {
+        "development": {
+          "args": [
+            "--config",
+            "apps/ryuzuya-chats/webpack.worker.config.js",
+            "--node-env=development"
+          ]
+        }
+      }
+    },
+    "build:worker:hook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "webpack-cli build",
+        "args": [
+          "--config",
+          "apps/ryuzuya-chats/webpack.worker-hook.config.js",
+          "--node-env=production"
+        ]
+      },
+      "configurations": {
+        "development": {
+          "args": [
+            "--config",
+            "apps/ryuzuya-chats/webpack.worker.config.js",
+            "--node-env=development"
+          ]
+        }
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "webpack-cli build",
-        "args": ["--node-env=production"]
+        "args": [
+          "--node-env=production"
+        ]
       },
       "configurations": {
         "development": {
-          "args": ["--node-env=development"]
+          "args": [
+            "--node-env=development"
+          ]
         }
       }
     },
@@ -21,7 +65,9 @@
       "continuous": true,
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "buildTarget": "ryuzuya-chats:build",
         "runBuildTargetDependencies": false

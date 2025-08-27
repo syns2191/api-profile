@@ -15,9 +15,19 @@ export class SkillCategoryService {
     return createdUser;
   }
 
+  async updateOne(id: string, createSkillCategory: CreateSkillCategoryDto): Promise<ISkillCategory> {
+    const updated = await this.skillCategoryModel.findOneAndUpdate(
+      {_id: id},
+      {$set: {
+        categoryName: createSkillCategory.categoryName
+      }}
+    )
+    return updated;
+  }
+
   async findOne(skillCategory: Partial<ISkillCategory>): Promise<ISkillCategory> {
     const stackData = await this.skillCategoryModel.findOne({
-      email: skillCategory.categoryName
+      _id: skillCategory._id
     });
     return stackData;
   }

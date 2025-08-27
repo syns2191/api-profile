@@ -2,7 +2,7 @@ import { Document } from "mongoose";
 
 export interface IProject extends Document {
   readonly projectTitle: string;
-  readonly prejectShortDescription: string;
+  readonly projectShortDescription: string;
   readonly projectImage: string;
   readonly projectDemoLink: string;
   readonly projectCodeLink: string;

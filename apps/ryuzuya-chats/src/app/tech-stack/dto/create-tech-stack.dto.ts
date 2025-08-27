@@ -11,4 +11,8 @@ export class CreateTechStackDto {
   @IsOptional()
   @IsArray()
   categories: [];
+
+  @IsOptional()
+  @IsString()
+  category: string;
 }

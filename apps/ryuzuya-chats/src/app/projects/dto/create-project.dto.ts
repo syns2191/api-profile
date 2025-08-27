@@ -5,7 +5,7 @@ export class CreateProjectDto {
   readonly projectTitle: string;
   @IsOptional()
   @IsString()
-  readonly prejectShortDescription: string;
+  readonly projectShortDescription: string;
   @IsOptional()
   @IsString()
   readonly projectImage: string;
@@ -18,4 +18,8 @@ export class CreateProjectDto {
   @IsOptional()
   @IsArray()
   readonly projectTeachStack: string[];
+
+  @IsOptional()
+  @IsString()
+  readonly user: string;
 }

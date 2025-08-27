@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Query } from '@nestjs/common';
+import { Body, Controller, Post, Get, Query, Param, Patch } from '@nestjs/common';
 import { TechStackService } from './tech-stack.service';
 import { CreateTechStackDto } from './dto/create-tech-stack.dto';
 import { ITechStackFilter } from './interfaces/tech-stack.interface';
@@ -29,5 +29,15 @@ export class TechSTackController {
       page: techStackFilter.page,
       limit: techStackFilter.limit
     });
+  }
+
+  @Get('category/:id')
+  async getStackCategoryById(@Param('id') id: string) {
+    return this.techStackService.findOneStackCategory(id);
+  }
+
+  @Patch('category/:id')
+  async updateStackCategory(@Param('id') id: string, @Body() body: CreateTechStackDto) {
+    return this.techStackService.updateOneStackCategory(id, body);
   }
 }
