@@ -18,18 +18,24 @@ export class TelegramService {
   }
 
   async sendToClient(telegramUpdate: TelegramUpdate) {
+    if (!telegramUpdate?.message?.text || !telegramUpdate?.message?.message_id || !telegramUpdate?.message?.reply_to_message?.text) {
+      return;
+    }
     const newTelegramData: TelegramUpdate = {
       message: {
         from: telegramUpdate?.message?.from,
         message_id: telegramUpdate?.message?.message_id,
         reply_to_message: {
-          text: telegramUpdate?.message?.reply_to_message.text
+          text: telegramUpdate?.message?.reply_to_message?.text
         },
-        text: telegramUpdate.message.text,
-        chat: telegramUpdate.message.chat
+        text: telegramUpdate?.message?.text,
+        chat: telegramUpdate?.message?.chat
       }
     }
-    const jobId = `telegram:${newTelegramData.message.message_id}:${hash(newTelegramData.message.text)}`;
+    if (!newTelegramData?.message?.text || !newTelegramData?.message?.message_id) {
+      return;
+    }
+    const jobId = `telegram:${newTelegramData?.message?.message_id}:${hash(newTelegramData?.message?.text)}`;
     this.chatQueue.add('telegram:hook', newTelegramData, {
       jobId
     })
